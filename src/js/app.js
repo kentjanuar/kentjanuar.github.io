@@ -3,8 +3,8 @@ var courseFeatureElements = document.querySelectorAll('.course-feature');
 var button = document.querySelector('button');
 
 var deferredPrompt;
+var installButton = document.querySelector('#install-button');
 
-// Register your service worker
 navigator.serviceWorker.register('/sw.js');
 
 function animate() {
@@ -53,30 +53,28 @@ function animate() {
 
 animate();
 
-// Listen for the beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', function(event) {
   console.log('beforeinstallprompt fired');
-  // Prevent the default mini-info-bar from appearing
   event.preventDefault();
-  // Stash the event so it can be triggered later
   deferredPrompt = event;
-
-  // Automatically show the native A2HS prompt after 4 seconds
   setTimeout(function() {
-    deferredPrompt.prompt();
-    // Handle the user's choice
-    deferredPrompt.userChoice.then(function(choiceResult) {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the A2HS prompt');
-      } else {
-        console.log('User dismissed the A2HS prompt');
-      }
-      deferredPrompt = null;
-    });
+    installButton.style.display = 'block'; // Show the install button after 4 seconds
   }, 4000);
 });
 
-// Example button to re-trigger animations
+installButton.addEventListener('click', function() {
+  installButton.style.display = 'none'; // Hide the install button
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(choiceResult) {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the A2HS prompt');
+    } else {
+      console.log('User dismissed the A2HS prompt');
+    }
+    deferredPrompt = null;
+  });
+});
+
 button.addEventListener('click', function() {
   animate();
 });
