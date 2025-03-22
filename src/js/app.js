@@ -5,11 +5,7 @@ var button = document.querySelector('button');
 var deferredPrompt;
 var installButton = document.querySelector('#install-button');
 
-
-
 navigator.serviceWorker.register('/sw.js');
-
-
 
 function animate() {
   title.classList.remove('animate-in');
@@ -57,12 +53,13 @@ function animate() {
 
 animate();
 
-
 window.addEventListener('beforeinstallprompt', function(event) {
   console.log('beforeinstallprompt fired');
   event.preventDefault();
   deferredPrompt = event;
-  installButton.style.display = 'block'; // Show the install button
+  setTimeout(function() {
+    installButton.style.display = 'block'; // Show the install button after 4 seconds
+  }, 4000);
 });
 
 installButton.addEventListener('click', function() {
