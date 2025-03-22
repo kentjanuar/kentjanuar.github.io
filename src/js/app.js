@@ -3,7 +3,6 @@ var courseFeatureElements = document.querySelectorAll('.course-feature');
 var button = document.querySelector('button');
 
 var deferredPrompt;
-var installButton = document.querySelector('#install-button');
 
 navigator.serviceWorker.register('/sw.js');
 
@@ -58,21 +57,41 @@ window.addEventListener('beforeinstallprompt', function(event) {
   event.preventDefault();
   deferredPrompt = event;
   setTimeout(function() {
-    installButton.style.display = 'block'; // Show the install button after 4 seconds
+    showInstallNotification();
   }, 4000);
 });
 
-installButton.addEventListener('click', function() {
-  installButton.style.display = 'none'; // Hide the install button
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(function(choiceResult) {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the A2HS prompt');
-    } else {
-      console.log('User dismissed the A2HS prompt');
-    }
-    deferredPrompt = null;
-  });
+function showInstallNotification() {
+  if (Notification.permission === 'granted') {
+    navigator.serviceWorker.ready.then(function(registration) {
+      registration.showNotification('Install PWAGram', {
+        body: 'Click here to install the app to your home screen.',
+        icon: '/src/images/icons/Instagram-icon-96.png',
+        tag: 'install-notification'
+      });
+    });
+  } else if (Notification.permission !== 'denied') {
+    Notification.requestPermission().then(function(permission) {
+      if (permission === 'granted') {
+        showInstallNotification();
+      }
+    });
+  }
+}
+
+navigator.serviceWorker.addEventListener('notificationclick', function(event) {
+  if (event.notification.tag === 'install-notification') {
+    event.notification.close();
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(choiceResult) {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the A2HS prompt');
+      } else {
+        console.log('User dismissed the A2HS prompt');
+      }
+      deferredPrompt = null;
+    });
+  }
 });
 
 button.addEventListener('click', function() {
