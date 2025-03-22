@@ -2,7 +2,14 @@ var title = document.querySelector('.title');
 var courseFeatureElements = document.querySelectorAll('.course-feature');
 var button = document.querySelector('button');
 
+var deferredPrompt;
+var installButton = document.querySelector('#install-button');
+
+
+
 navigator.serviceWorker.register('/sw.js');
+
+
 
 function animate() {
   title.classList.remove('animate-in');
@@ -49,6 +56,27 @@ function animate() {
 }
 
 animate();
+
+
+window.addEventListener('beforeinstallprompt', function(event) {
+  console.log('beforeinstallprompt fired');
+  event.preventDefault();
+  deferredPrompt = event;
+  installButton.style.display = 'block'; // Show the install button
+});
+
+installButton.addEventListener('click', function() {
+  installButton.style.display = 'none'; // Hide the install button
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(choiceResult) {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the A2HS prompt');
+    } else {
+      console.log('User dismissed the A2HS prompt');
+    }
+    deferredPrompt = null;
+  });
+});
 
 button.addEventListener('click', function() {
   animate();
