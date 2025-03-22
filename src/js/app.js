@@ -3,8 +3,8 @@ var courseFeatureElements = document.querySelectorAll('.course-feature');
 var button = document.querySelector('button');
 
 var deferredPrompt;
+var installButton = document.querySelector('#install-button');
 
-// Register service worker
 navigator.serviceWorker.register('/sw.js');
 
 function animate() {
@@ -53,32 +53,26 @@ function animate() {
 
 animate();
 
-// Listen for the beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', function(event) {
   console.log('beforeinstallprompt fired');
   event.preventDefault();
   deferredPrompt = event;
-  
-  // Show the install prompt after 4 seconds
   setTimeout(function() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      
-      deferredPrompt.userChoice.then(function(choiceResult) {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the A2HS prompt');
-        } else {
-          console.log('User dismissed the A2HS prompt');
-        }
-        deferredPrompt = null;
-      });
-    }
+    installButton.style.display = 'block'; // Show the install button after 4 seconds
   }, 4000);
 });
 
-// Listen for app installed event
-window.addEventListener('appinstalled', function(event) {
-  console.log('App was installed', event);
+installButton.addEventListener('click', function() {
+  installButton.style.display = 'none'; // Hide the install button
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(choiceResult) {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the A2HS prompt');
+    } else {
+      console.log('User dismissed the A2HS prompt');
+    }
+    deferredPrompt = null;
+  });
 });
 
 button.addEventListener('click', function() {
