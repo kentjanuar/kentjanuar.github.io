@@ -1,11 +1,11 @@
 self.addEventListener('install', function(event) {
   console.log('[Service Worker] Installing Service Worker ...', event);
-  self.skipWaiting(); //PENTING bila ada versi baru!!
+  self.skipWaiting(); // Force update on new version
   event.waitUntil(
     caches.open('static')
       .then(function(cache) {
         console.log('[Service Worker] Precaching App Shell');
-        cache.addAll([
+        return cache.addAll([  
           '/',
           '/index.html',
           '/src/js/app.js',
@@ -23,8 +23,9 @@ self.addEventListener('install', function(event) {
           '/src/css/offline.css'
         ]);
       })
-  )
+  );
 });
+
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(
