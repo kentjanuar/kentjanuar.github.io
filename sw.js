@@ -19,7 +19,7 @@ self.addEventListener('install', function(event) {
           'https://fonts.googleapis.com/css?family=Roboto:400,700',
           'https://fonts.googleapis.com/icon?family=Material+Icons',
           'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css',
-          '/offline.html', // Add offline.html to the cache
+          '/offline.html', 
           '/src/css/offline.css'
         ]);
       })
