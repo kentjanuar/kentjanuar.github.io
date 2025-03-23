@@ -40,14 +40,33 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    fetch(event.request).catch(function() {
-      return caches.match(event.request).then(function(response) {
+    caches.match(event.request)
+      .then(function(response) {
+        // Return cached response if found
         if (response) {
           return response;
-        } else if (event.request.headers.get('accept').includes('text/html')) {
-          return caches.match(OFFLINE_PAGE); // Serve the offline fallback page
         }
-      });
-    })
+        
+        // Otherwise, fetch from network
+        return fetch(event.request)
+          .then(function(res) {
+            // Make a copy of the response
+            const resClone = res.clone();
+            
+            // Open dynamic cache and store the response
+            caches.open(DYNAMIC_CACHE)
+              .then(function(cache) {
+                cache.put(event.request, resClone);
+              });
+              
+            return res;
+          })
+          .catch(function(err) {
+            // If both cache and network fail for HTML requests, show offline page
+            if (event.request.headers.get('accept').includes('text/html')) {
+              return caches.match(OFFLINE_PAGE);
+            }
+          });
+      })
   );
 });
