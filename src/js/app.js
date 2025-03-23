@@ -2,6 +2,7 @@ var title = document.querySelector('.title');
 var courseFeatureElements = document.querySelectorAll('.course-feature');
 var button = document.querySelector('button');
 
+//penting
 var deferredPrompt;
 var installButton = document.querySelector('#install-button');
 
@@ -57,7 +58,7 @@ function animate() {
 
 animate();
 
-
+//penting
 window.addEventListener('beforeinstallprompt', function(event) {
   console.log('beforeinstallprompt fired');
   event.preventDefault();

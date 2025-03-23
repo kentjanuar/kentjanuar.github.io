@@ -18,33 +18,51 @@ self.addEventListener('install', function(event) {
           '/src/images/main-image.jpg',
           'https://fonts.googleapis.com/css?family=Roboto:400,700',
           'https://fonts.googleapis.com/icon?family=Material+Icons',
-          'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'
+          'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css',
+          '/offline.html', // Add offline.html to the cache
+          '/src/css/offline.css'
         ]);
       })
   )
 });
 
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+              return cachedResponse; // Serve from cache first
+          }
 
-self.addEventListener('activate', function(event) {
-  console.log('[Service Worker] Activating Service Worker ....', event);
-  return self.clients.claim();
+          return fetch(event.request).catch(() => {
+              // If request is for a navigation (HTML page), return the offline fallback
+              if (event.request.mode === "navigate") {
+                  return caches.match("/offline.html"); 
+              }
+          });
+      })
+  );
 });
 
 
 
+// self.addEventListener('activate', function(event) {
+//   console.log('[Service Worker] Activating Service Worker ....', event);
+//   return self.clients.claim();
+// });
 
 
-  self.addEventListener('fetch', function(event) {
-    event.respondWith(
-      caches.open(CACHE_DYNAMIC_NAME)
-        .then(function(cache) {
-          return fetch(event.request)
-            .then(function(res) {
-              cache.put(event.request, res.clone());
-              return res;
-            });
-        })
-    );
-  });
+
+  // self.addEventListener('fetch', function(event) {
+  //   event.respondWith(
+  //     caches.open(CACHE_DYNAMIC_NAME)
+  //       .then(function(cache) {
+  //         return fetch(event.request)
+  //           .then(function(res) {
+  //             cache.put(event.request, res.clone());
+  //             return res;
+  //           });
+  //       })
+  //   );
+  // });
   
   
