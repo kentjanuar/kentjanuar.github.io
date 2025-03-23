@@ -40,11 +40,14 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request).catch(() => caches.match('/offline.html'));
+    fetch(event.request).catch(function() {
+      return caches.match(event.request).then(function(response) {
+        if (response) {
+          return response;
+        } else if (event.request.headers.get('accept').includes('text/html')) {
+          return caches.match(OFFLINE_PAGE); // Serve the offline fallback page
+        }
+      });
     })
   );
 });
-
-
-
