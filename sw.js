@@ -14,6 +14,7 @@ self.addEventListener('install', (event) => {
         '/src/css/app.css',
         '/src/js/app.js',
         '/manifest.json',
+        '/second.html',
         '/src/css/offline.css'
       ]);
     })
