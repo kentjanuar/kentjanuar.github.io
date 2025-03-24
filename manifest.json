@@ -1,39 +1,39 @@
 {
     "name": "Instagram as Progressive Web App",
-    "short_name": "PWAGram",
+    "short_name": "Tes1",
     "icons": [
       {
-        "src": "/src/images/icons/Instagram-icon-48.png",
+        "src": "images/icons/Instagram-icon-48.png",
         "type": "image/png",
         "sizes": "48x48"
       },
       {
-        "src": "/src/images/icons/Instagram-icon-96.png",
+        "src": "images/icons/Instagram-icon-96.png",
         "type": "image/png",
         "sizes": "96x96"
       },
       {
-        "src": "/src/images/icons/Instagram-icon-144.png",
+        "src": "images/icons/Instagram-icon-144.png",
         "type": "image/png",
         "sizes": "144x144"
       },
       {
-        "src": "/src/images/icons/Instagram-icon-192.png",
+        "src": "images/icons/Instagram-icon-192.png",
         "type": "image/png",
         "sizes": "192x192"
       },
       {
-        "src": "/src/images/icons/Instagram-icon-256.png",
+        "src": "images/icons/Instagram-icon-256.png",
         "type": "image/png",
         "sizes": "256x256"
       },
       {
-        "src": "/src/images/icons/Instagram-icon-384.png",
+        "src": "images/icons/Instagram-icon-384.png",
         "type": "image/png",
         "sizes": "384x384"
       },
       {
-        "src": "/src/images/icons/Instagram-icon-512.png",
+        "src": "images/icons/Instagram-icon-512.png",
         "type": "image/png",
         "sizes": "512x512"
       }

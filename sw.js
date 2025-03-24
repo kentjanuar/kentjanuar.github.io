@@ -11,11 +11,11 @@ self.addEventListener('install', (event) => {
         '/',
         '/index.html',
         '/offline.html',
-        '/src/css/app.css',
-        '/src/js/app.js',
+        '/css/app.css',
+        '/js/index.js',
         '/manifest.json',
-        '/second.html',
-        '/src/css/offline.css'
+        '/about.html',
+        '/css/offline.css'
       ]).then(() => {
         console.log('[Service Worker] All assets cached');
       }).catch((error) => {
