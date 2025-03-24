@@ -14,7 +14,6 @@ self.addEventListener('install', (event) => {
         '/css/app.css',
         '/js/index.js',
         '/manifest.json',
-        '/about.html',
         '/css/offline.css'
       ]).then(() => {
         console.log('[Service Worker] All assets cached');
