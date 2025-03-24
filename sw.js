@@ -11,11 +11,11 @@ self.addEventListener('install', (event) => {
         '/',
         '/index.html',
         '/offline.html',
-        '/css/app.css',
-        '/js/index.js',
+        '/src/css/app.css',
+        '/src/js/app.js',
         '/manifest.json',
-        '/about.html',
-        '/css/offline.css'
+        '/second.html',
+        '/src/css/offline.css'
       ]).then(() => {
         console.log('[Service Worker] All assets cached');
       }).catch((error) => {
@@ -45,39 +45,29 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    // Try the network first
-    fetch(event.request)
-      .then(function(res) {
-        // Clone the response before using it
+    caches.match(event.request).then(function(response) {
+      // Return cached response if found
+      if (response) {
+        return response;
+      }
+      
+      // Otherwise, fetch from network
+      return fetch(event.request).then(function(res) {
+        // Make a copy of the response
         const resClone = res.clone();
         
-        // Cache the successful network response
-        caches.open(DYNAMIC_CACHE)
-          .then(function(cache) {
-            cache.put(event.request, resClone);
-          });
+        // Open dynamic cache and store the response
+        caches.open(DYNAMIC_CACHE).then(function(cache) {
+          cache.put(event.request, resClone);
+        });
         
         return res;
-      })
-      .catch(function(err) {
-        // If network fails, try the cache
-        return caches.match(event.request)
-          .then(function(response) {
-            if (response) {
-              return response;
-            }
-            
-            // If not in cache and it's an HTML request, show offline page
-            if (event.request.headers.get('accept').includes('text/html')) {
-              return caches.match(OFFLINE_PAGE);
-            }
-            
-            // For other types of requests that aren't cached
-            return new Response('Not found', {
-              status: 404, 
-              statusText: 'Not found'
-            });
-          });
-      })
+      }).catch(function(err) {
+        // If both cache and network fail for HTML requests, show offline page
+        if (event.request.headers.get('accept').includes('text/html')) {
+          return caches.match(OFFLINE_PAGE);
+        }
+      });
+    })
   );
 });
