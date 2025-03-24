@@ -1,6 +1,17 @@
 var deferredPrompt;
 var installButton = document.querySelector('#install-button');
 
+
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(event) {
+  console.log('beforeinstallprompt fired');
+  event.preventDefault();
+  deferredPrompt = event;
+  return false;
+});
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
   fetch('https://jsonplaceholder.typicode.com/posts')
     .then(response => response.json())
