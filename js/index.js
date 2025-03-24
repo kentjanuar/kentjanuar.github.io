@@ -27,11 +27,11 @@ window.addEventListener('beforeinstallprompt', function(event) {
   console.log('beforeinstallprompt fired');
   event.preventDefault();
   deferredPrompt = event;
-  installButton.style.display = 'block'; // Show the install button
+  installButton.style.display = 'block'; 
 });
 
 installButton.addEventListener('click', function() {
-  installButton.style.display = 'none'; // Hide the install button
+  installButton.style.display = 'none'; 
   deferredPrompt.prompt();
   deferredPrompt.userChoice.then(function(choiceResult) {
     if (choiceResult.outcome === 'accepted') {
