@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="navigation">
-    <button id="install-button" style="display: none;">Install App</button>
+    <button id="install-button" disabled>Install App</button>
   </div>
   <script src="/js/index.js"></script>
   <script>
@@ -47,10 +47,10 @@
       console.log('beforeinstallprompt fired');
       e.preventDefault();
       deferredPrompt = e;
-      installButton.style.display = 'block';
+      installButton.disabled = false;
 
       installButton.addEventListener('click', () => {
-        installButton.style.display = 'none';
+        installButton.disabled = true;
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then((choiceResult) => {
           if (choiceResult.outcome === 'accepted') {
